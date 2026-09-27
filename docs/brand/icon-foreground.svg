@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Adaptive-icon FOREGROUND. Art stays inside the centre 66% safe zone
+       (roughly x/y 174..850) because launchers crop to circles, squircles etc. -->
+
+  <!-- film strip: perforations down both edges of a frame -->
+  <g fill="#E8B44A">
+    <rect x="300" y="336" width="36" height="46" rx="8"/>
+    <rect x="300" y="420" width="36" height="46" rx="8"/>
+    <rect x="300" y="504" width="36" height="46" rx="8"/>
+    <rect x="300" y="588" width="36" height="46" rx="8"/>
+
+    <rect x="688" y="336" width="36" height="46" rx="8"/>
+    <rect x="688" y="420" width="36" height="46" rx="8"/>
+    <rect x="688" y="504" width="36" height="46" rx="8"/>
+    <rect x="688" y="588" width="36" height="46" rx="8"/>
+  </g>
+
+  <!-- the bulb: the one light in the dark room -->
+  <circle cx="512" cy="485" r="118" fill="#E8B44A"/>
+  <circle cx="474" cy="447" r="34" fill="#F6D89A"/>
+</svg>

@@ -1,0 +1,469 @@
+<title>MovieVault Build Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+
+<style>
+  :root {
+    --paper: #F1F2F0;
+    --surface: #FFFFFF;
+    --ink: #171A1D;
+    --muted: #646D76;
+    --rule: #D6DAD7;
+    --accent: #B07E14;
+
+    /* app palette — fixed, same in both themes */
+    --app-ink: #0B0F14;
+    --app-raised: #151C24;
+    --app-line: #232C36;
+    --app-bulb: #E8B44A;
+    --app-chalk: #EDEAE4;
+    --app-dim: #7C8794;
+    --app-alert: #E05D52;
+
+    --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --paper: #0E1113;
+      --surface: #161A1D;
+      --ink: #E7EAE8;
+      --muted: #8A939B;
+      --rule: #262B2F;
+      --accent: #E8B44A;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #0E1113;
+    --surface: #161A1D;
+    --ink: #E7EAE8;
+    --muted: #8A939B;
+    --rule: #262B2F;
+    --accent: #E8B44A;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0;
+    padding-inline: 20px;
+    padding-block: 48px 80px;
+  }
+
+  .wrap {
+    margin: 0 auto;
+    max-width: 1080px;
+  }
+
+  header { border-bottom: 1px solid var(--rule); padding-bottom: 28px; }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.7rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .sub {
+    color: var(--muted);
+    margin: 14px 0 0;
+    max-width: 58ch;
+  }
+
+  .meta {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.04em;
+    margin-top: 18px;
+  }
+
+  h2 {
+    border-bottom: 1px solid var(--rule);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    margin: 64px 0 24px;
+    padding-bottom: 9px;
+    text-transform: uppercase;
+  }
+
+  h3 { font-size: 1rem; font-weight: 600; margin: 0 0 6px; }
+
+  p { margin: 0 0 14px; max-width: 66ch; }
+  p:last-child { margin-bottom: 0; }
+
+  .lead { font-size: 1.02rem; }
+
+  .cols {
+    display: grid;
+    gap: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  /* ---- tokens ---- */
+  .swatches { display: grid; gap: 2px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 104px;
+    padding: 10px 12px;
+  }
+
+  .swatch b { display: block; font-size: 0.82rem; font-weight: 600; }
+  .swatch span { font-family: var(--mono); font-size: 0.72rem; opacity: 0.75; }
+
+  .scale { border-collapse: collapse; width: 100%; }
+  .scale td { border-bottom: 1px solid var(--rule); padding: 11px 0; vertical-align: baseline; }
+  .scale td:last-child { color: var(--muted); font-family: var(--mono); font-size: 0.74rem; text-align: right; white-space: nowrap; }
+
+  .steps { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; margin: 0; padding: 0; list-style: none; }
+  .steps li { text-align: center; }
+  .steps i { background: var(--accent); display: block; height: 10px; opacity: 0.55; }
+  .steps span { color: var(--muted); font-family: var(--mono); font-size: 0.7rem; }
+
+  /* ---- phone mockups ---- */
+  .screens {
+    display: grid;
+    gap: 40px 28px;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  }
+
+  .screen h3 { margin-bottom: 4px; }
+  .screen .note { color: var(--muted); font-size: 0.87rem; margin: 0 0 16px; }
+
+  .phone {
+    background: var(--app-ink);
+    border: 1px solid var(--app-line);
+    border-radius: 26px;
+    color: var(--app-chalk);
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    height: 520px;
+    max-width: 268px;
+    overflow: hidden;
+    padding: 14px 16px 16px;
+  }
+
+  .statusbar {
+    color: var(--app-dim);
+    display: flex;
+    font-family: var(--mono);
+    font-size: 9px;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .grow { flex: 1; }
+
+  .wordmark { font-size: 26px; font-weight: 700; letter-spacing: -0.045em; line-height: 1; }
+  .tagline { color: var(--app-dim); font-size: 11px; line-height: 1.5; margin: 8px 0 0; max-width: 20ch; }
+
+  .flabel { color: var(--app-dim); font-size: 9.5px; margin: 14px 0 5px; }
+
+  .field {
+    align-items: center;
+    background: var(--app-raised);
+    border: 1px solid var(--app-line);
+    border-radius: 8px;
+    color: var(--app-dim);
+    display: flex;
+    font-size: 11px;
+    justify-content: space-between;
+    padding: 10px 11px;
+  }
+  .field.focus { border-color: var(--app-bulb); color: var(--app-chalk); }
+
+  .cta {
+    background: var(--app-bulb);
+    border-radius: 8px;
+    color: var(--app-ink);
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 18px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .switchline { color: var(--app-dim); font-size: 10px; margin-top: 14px; text-align: center; }
+
+  .err { color: var(--app-alert); font-size: 10px; margin-top: 10px; }
+
+  .screenTitle { font-size: 19px; font-weight: 700; letter-spacing: -0.02em; }
+
+  .tabs { display: flex; gap: 14px; margin: 12px 0 10px; }
+  .tab { color: var(--app-dim); font-size: 11px; padding-bottom: 5px; }
+  .tab.on { border-bottom: 2px solid var(--app-bulb); color: var(--app-chalk); }
+
+  .grid3 { display: grid; gap: 8px; grid-template-columns: repeat(3, 1fr); }
+
+  .poster {
+    aspect-ratio: 2 / 3;
+    border-radius: 5px;
+    display: flex;
+    align-items: flex-end;
+    font-size: 8px;
+    font-weight: 600;
+    line-height: 1.2;
+    overflow: hidden;
+    padding: 5px;
+  }
+  .p1 { background: linear-gradient(160deg, #2E4A6B, #14202E); }
+  .p2 { background: linear-gradient(160deg, #6B3A2E, #2A1712); }
+  .p3 { background: linear-gradient(160deg, #3C5C4A, #16241C); }
+  .p4 { background: linear-gradient(160deg, #57406B, #221A2B); }
+  .p5 { background: linear-gradient(160deg, #6B5A2E, #2B2412); }
+  .p6 { background: linear-gradient(160deg, #2E566B, #12222B); }
+
+  .hero {
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(170deg, #2E4A6B, #0B0F14);
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0 0; }
+  .chip {
+    border: 1px solid var(--app-line);
+    border-radius: 99px;
+    color: var(--app-dim);
+    font-size: 8.5px;
+    padding: 3px 8px;
+  }
+
+  .body-copy { color: var(--app-dim); font-size: 9.5px; line-height: 1.6; margin-top: 10px; }
+
+  .row {
+    align-items: center;
+    border-bottom: 1px solid var(--app-line);
+    display: flex;
+    gap: 10px;
+    padding: 9px 0;
+  }
+  .row .mini { border-radius: 3px; flex: none; height: 42px; width: 28px; }
+  .row .t { font-size: 11px; font-weight: 600; }
+  .row .s { color: var(--app-dim); font-size: 9px; margin-top: 2px; }
+  .stat {
+    border: 1px solid var(--app-bulb);
+    border-radius: 99px;
+    color: var(--app-bulb);
+    font-size: 8.5px;
+    margin-left: auto;
+    padding: 2px 7px;
+  }
+  .stat.done { border-color: var(--app-line); color: var(--app-dim); }
+
+  .bottombar {
+    border-top: 1px solid var(--app-line);
+    display: flex;
+    justify-content: space-around;
+    margin: 12px -16px -16px;
+    padding: 10px 0 12px;
+  }
+  .bi { color: var(--app-dim); font-size: 9px; }
+  .bi.on { color: var(--app-bulb); }
+
+  .empty { color: var(--app-dim); font-size: 10px; line-height: 1.6; text-align: center; padding: 0 12px; }
+
+  /* ---- rules list ---- */
+  .rules { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .rule-item { background: var(--surface); padding: 16px 18px; }
+  .rule-item b { display: block; font-size: 0.92rem; margin-bottom: 4px; }
+  .rule-item span { color: var(--muted); font-size: 0.89rem; }
+
+  code {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 0.85em;
+    padding: 1px 5px;
+  }
+
+  footer { border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.85rem; margin-top: 64px; padding-top: 22px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cta { transition: transform 0.15s ease; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <h1>MovieVault build spec</h1>
+    <p class="sub lead">A personal film catalogue, not a streaming service. Every screen below is drawn to the tokens underneath it — build against these, then screenshot the emulator and we compare.</p>
+    <p class="meta">REACT NATIVE 0.87 · ANDROID · SUPABASE + TMDB</p>
+  </header>
+
+  <h2>The idea</h2>
+  <p class="lead">The UI is the dark room. The posters are the light.</p>
+  <p>Film posters are loud — saturated, high-contrast, fighting for attention by design. If the interface competes with them, both lose. So the chrome stays deep blue-black and near-silent, and every scrap of colour on screen comes from the artwork itself.</p>
+  <p>One exception: a tungsten amber, the colour of a projector bulb, reserved strictly for the thing you can act on right now. One accent, one job. When you see amber, you can tap it.</p>
+
+  <h2>Colour</h2>
+  <div class="swatches">
+    <div class="swatch" style="background:#0B0F14;color:#EDEAE4"><b>ink</b><span>#0B0F14</span></div>
+    <div class="swatch" style="background:#151C24;color:#EDEAE4"><b>raised</b><span>#151C24</span></div>
+    <div class="swatch" style="background:#232C36;color:#EDEAE4"><b>line</b><span>#232C36</span></div>
+    <div class="swatch" style="background:#E8B44A;color:#0B0F14"><b>bulb</b><span>#E8B44A</span></div>
+    <div class="swatch" style="background:#EDEAE4;color:#0B0F14"><b>chalk</b><span>#EDEAE4</span></div>
+    <div class="swatch" style="background:#7C8794;color:#0B0F14"><b>dim</b><span>#7C8794</span></div>
+    <div class="swatch" style="background:#E05D52;color:#0B0F14"><b>alert</b><span>#E05D52</span></div>
+  </div>
+  <p style="margin-top:18px">The ground is blue-black, not neutral grey — <code>#0B0F14</code> against a plain <code>#111</code> reads cooler and deliberately lit. <b>bulb</b> appears only on the primary button and the focused input border. Never as decoration, never as a heading colour.</p>
+
+  <h2>Type</h2>
+  <table class="scale">
+    <tr><td style="font-size:26px;font-weight:700;letter-spacing:-0.045em">MovieVault</td><td>40 / 700 / −1.2 tracking</td></tr>
+    <tr><td style="font-size:19px;font-weight:700;letter-spacing:-0.02em">Screen title</td><td>28 / 700 / −0.5</td></tr>
+    <tr><td style="font-size:14px;font-weight:600">Row title, button</td><td>16 / 600</td></tr>
+    <tr><td style="font-size:13px">Body copy and inputs</td><td>15 / 400 / 22 line-height</td></tr>
+    <tr><td style="font-size:11px;color:var(--muted)">Field label, caption</td><td>13 / 400 / dim</td></tr>
+  </table>
+  <p style="margin-top:18px">System font throughout. Negative tracking on the two largest sizes only — it tightens display type and does nothing good below ~20px. No uppercase labels anywhere in the app; they read as chrome and this app has almost none.</p>
+
+  <h2>Spacing</h2>
+  <ul class="steps">
+    <li><i style="width:4px"></i><span>4</span></li>
+    <li><i style="width:8px"></i><span>8</span></li>
+    <li><i style="width:12px"></i><span>12</span></li>
+    <li><i style="width:16px"></i><span>16</span></li>
+    <li><i style="width:24px"></i><span>24</span></li>
+    <li><i style="width:32px"></i><span>32</span></li>
+    <li><i style="width:48px"></i><span>48</span></li>
+  </ul>
+  <p style="margin-top:18px">Screen gutter is <b>28</b>. Radius is <b>10</b> on inputs and buttons, <b>5</b> on posters, <b>99</b> on status pills. Three radii, each meaning a different kind of object — not one value stamped on everything.</p>
+
+  <h2>Screens</h2>
+  <div class="screens">
+
+    <div class="screen">
+      <h3>Sign in</h3>
+      <p class="note">Bottom-weighted and left-aligned. Inputs sit in thumb reach; a centred card would not.</p>
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="grow"></div>
+        <div class="wordmark">MovieVault</div>
+        <p class="tagline">Keep track of what you want to watch, and what you thought of it.</p>
+        <div style="height:28px"></div>
+        <div class="flabel">Email</div>
+        <div class="field">you@example.com</div>
+        <div class="flabel">Password</div>
+        <div class="field focus"><span>••••••••</span><span style="color:var(--app-dim)">Show</span></div>
+        <div class="err">Invalid login credentials.</div>
+        <div class="cta">Sign in</div>
+        <div class="switchline">New here? Create an account</div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <h3>Discover</h3>
+      <p class="note">Three-column poster grid. No titles under the artwork — the poster is the label.</p>
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="screenTitle">Discover</div>
+        <div class="tabs">
+          <div class="tab on">Popular</div>
+          <div class="tab">Top rated</div>
+          <div class="tab">Upcoming</div>
+        </div>
+        <div class="grid3">
+          <div class="poster p1"></div><div class="poster p2"></div><div class="poster p3"></div>
+          <div class="poster p4"></div><div class="poster p5"></div><div class="poster p6"></div>
+          <div class="poster p3"></div><div class="poster p1"></div><div class="poster p4"></div>
+          <div class="poster p6"></div><div class="poster p2"></div><div class="poster p5"></div>
+        </div>
+        <div class="bottombar">
+          <span class="bi on">Discover</span><span class="bi">Search</span><span class="bi">Watchlist</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <h3>Search</h3>
+      <p class="note">A list, not a grid. Dozens of films share a title — you need the year and rating to pick the right one, and a poster alone can't tell you.</p>
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="screenTitle">Search</div>
+        <div style="height:12px"></div>
+        <div class="field focus"><span>arrival</span><span style="color:var(--app-dim)">Clear</span></div>
+        <div style="height:6px"></div>
+        <div class="row"><div class="mini p1"></div><div><div class="t">Arrival</div><div class="s">2016 · Sci-Fi, Drama</div></div><span class="stat done">7.6</span></div>
+        <div class="row"><div class="mini p5"></div><div><div class="t">The Arrival</div><div class="s">1996 · Sci-Fi</div></div><span class="stat done">6.1</span></div>
+        <div class="row"><div class="mini p3"></div><div><div class="t">Arrival of a Train</div><div class="s">1896 · Documentary</div></div><span class="stat done">7.2</span></div>
+        <div class="grow"></div>
+        <div class="bottombar">
+          <span class="bi">Discover</span><span class="bi on">Search</span><span class="bi">Watchlist</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <h3>Detail</h3>
+      <p class="note">Backdrop fades into the ground rather than sitting in a card. The only amber is the save action.</p>
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="hero"></div>
+        <div class="screenTitle">Arrival</div>
+        <div class="chips"><span class="chip">2016</span><span class="chip">Sci-Fi</span><span class="chip">116 min</span><span class="chip">7.6</span></div>
+        <p class="body-copy">A linguist is recruited by the military to communicate with alien lifeforms after twelve mysterious spacecraft land around the world.</p>
+        <div class="cta">Add to watchlist</div>
+        <div class="grow"></div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <h3>Watchlist</h3>
+      <p class="note">A list, not a grid — you already know these films, so the row carries status and your rating instead.</p>
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="screenTitle">Watchlist</div>
+        <div class="tabs"><div class="tab on">Want to watch</div><div class="tab">Watched</div></div>
+        <div class="row"><div class="mini p1"></div><div><div class="t">Arrival</div><div class="s">2016 · Sci-Fi</div></div><span class="stat">Want</span></div>
+        <div class="row"><div class="mini p2"></div><div><div class="t">Heat</div><div class="s">1995 · Crime</div></div><span class="stat">Want</span></div>
+        <div class="row"><div class="mini p3"></div><div><div class="t">Paprika</div><div class="s">2006 · Animation</div></div><span class="stat">Want</span></div>
+        <div class="row"><div class="mini p4"></div><div><div class="t">Burning</div><div class="s">2018 · Drama</div></div><span class="stat done">8/10</span></div>
+        <div class="grow"></div>
+        <div class="bottombar">
+          <span class="bi">Discover</span><span class="bi">Search</span><span class="bi on">Watchlist</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <h2>Motion</h2>
+  <div class="rules">
+    <div class="rule-item"><b>Press scale on the primary button</b><span>Spring to 0.97 on press-in, back on release. Confirms the tap before the network does.</span></div>
+    <div class="rule-item"><b>Shake on failed sign-in</b><span>Four steps: −8, +8, −5, 0 at 50ms each. Shows what changed, on the element that changed.</span></div>
+    <div class="rule-item"><b>Fade the error in</b><span>180ms. The text appearing instantly reads as a layout jump rather than a message.</span></div>
+    <div class="rule-item"><b>Nothing animates on mount</b><span>Staggered fade-and-slide entrances on every screen are the generic default. Motion here answers an action or it doesn't happen.</span></div>
+  </div>
+
+  <h2>States to build</h2>
+  <div class="rules">
+    <div class="rule-item"><b>Loading</b><span>Poster-shaped placeholders in the grid, not a centred spinner. The layout shouldn't jump when data lands.</span></div>
+    <div class="rule-item"><b>Empty watchlist</b><span>"Nothing saved yet. Find something in Discover." — an invitation, naming the next action.</span></div>
+    <div class="rule-item"><b>Search, before typing</b><span>"Search by title." Nothing else — no popular suggestions, no recent searches until there are any.</span></div>
+    <div class="rule-item"><b>Search, no results</b><span>"No films match ‘xyz’." Name what was searched, so it's clear the query ran.</span></div>
+    <div class="rule-item"><b>Network error</b><span>"Couldn't reach TMDB. Check your connection and try again." plus a retry control. No apology, no vagueness.</span></div>
+    <div class="rule-item"><b>Offline with cached data</b><span>Show the cached list with a quiet banner. Don't blank a screen that has content to show.</span></div>
+  </div>
+
+  <footer>
+    Build a screen, then run <code>adb exec-out screencap -p &gt; screen.png</code> and we compare it against this.
+  </footer>
+
+</div>
