@@ -101,8 +101,14 @@ function SearchScreen() {
         />
 
         {query.length > 0 && (
-          <Pressable style={styles.clear} onPress={() => setQuery('')} hitSlop={8}>
-            <AppText variant="label" style={styles.clearText}>Clear</AppText>
+          <Pressable
+            style={styles.clear}
+            onPress={() => setQuery('')}
+            hitSlop={8}
+          >
+            <AppText variant="label" style={styles.clearText}>
+              Clear
+            </AppText>
           </Pressable>
         )}
       </View>
@@ -115,14 +121,18 @@ function SearchScreen() {
         onEndReachedThreshold={0.5}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={movies.length === 0 ? styles.emptyContent : undefined}
+        contentContainerStyle={
+          movies.length === 0 ? styles.emptyContent : undefined
+        }
         ListEmptyComponent={empty}
         ListFooterComponent={
           isFetchingNextPage ? (
             <View style={styles.footer}>
               <ActivityIndicator color={colors.bulb} />
             </View>
-          ) : <></>
+          ) : (
+            <></>
+          )
         }
       />
     </SafeAreaView>

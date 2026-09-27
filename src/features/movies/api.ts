@@ -22,11 +22,10 @@ export function useMoviesList(type: ListType = 'popular', initialPage = 1) {
     initialPageParam: initialPage,
     queryFn: ({ pageParam = initialPage }) =>
       tmdb<MovieListResponse>(`/movie/${ENDPOINTS[type]}?page=${pageParam}`),
-    getNextPageParam: (lastPage) =>
+    getNextPageParam: lastPage =>
       lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
   });
 }
-
 
 export function useSearchMovies(query: string) {
   const trimmed = query.trim();

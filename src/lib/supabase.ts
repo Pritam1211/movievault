@@ -12,7 +12,7 @@ const storage = {
 };
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-    db: { schema: 'movies' },
+  db: { schema: 'movies' },
   auth: {
     storage,
     autoRefreshToken: true,

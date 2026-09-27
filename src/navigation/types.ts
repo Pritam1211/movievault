@@ -8,13 +8,11 @@ export type BottomTabParamList = {
   Watchlist: undefined;
 };
 
-
 export type AppStackParamList = {
   Tabs: BottomTabParamList;
-  MovieDetails: { id: number, title: string };
+  MovieDetails: { id: number; title: string };
   Account: undefined;
 };
-  
 
 declare global {
   namespace ReactNavigation {

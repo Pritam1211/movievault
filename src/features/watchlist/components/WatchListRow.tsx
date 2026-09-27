@@ -28,12 +28,20 @@ export default memo(function WatchlistRow({
       accessibilityLabel={entry.title}
     >
       <View style={styles.thumb}>
-        {uri && <Image source={{ uri }} style={styles.image} resizeMode="cover" />}
+        {uri && (
+          <Image source={{ uri }} style={styles.image} resizeMode="cover" />
+        )}
       </View>
 
       <View style={styles.text}>
-        <AppText variant="strong" numberOfLines={1}>{entry.title}</AppText>
-        {year && <AppText variant="label" style={styles.year}>{year}</AppText>}
+        <AppText variant="strong" numberOfLines={1}>
+          {entry.title}
+        </AppText>
+        {year && (
+          <AppText variant="label" style={styles.year}>
+            {year}
+          </AppText>
+        )}
       </View>
 
       <Pressable
@@ -41,9 +49,14 @@ export default memo(function WatchlistRow({
         hitSlop={10}
         style={[styles.pill, watched && styles.pillWatched]}
         accessibilityRole="button"
-        accessibilityLabel={watched ? 'Mark as want to watch' : 'Mark as watched'}
+        accessibilityLabel={
+          watched ? 'Mark as want to watch' : 'Mark as watched'
+        }
       >
-        <AppText variant="caption" style={watched ? styles.pillWatchedText : styles.pillText}>
+        <AppText
+          variant="caption"
+          style={watched ? styles.pillWatchedText : styles.pillText}
+        >
           {watched ? 'Watched' : 'Want'}
         </AppText>
       </Pressable>

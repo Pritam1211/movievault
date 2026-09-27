@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" App.tsx",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\" App.tsx",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",

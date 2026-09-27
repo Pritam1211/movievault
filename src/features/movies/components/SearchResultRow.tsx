@@ -10,7 +10,10 @@ type Props = {
   onPress: (movie: Movie) => void;
 };
 
-export const SearchResultRow = memo(function SearchResultRow({ movie, onPress }: Props) {
+export const SearchResultRow = memo(function SearchResultRow({
+  movie,
+  onPress,
+}: Props) {
   const uri = posterUrl(movie.poster_path, 'w154');
   const year = movie.release_date ? movie.release_date.slice(0, 4) : null;
 
@@ -22,13 +25,19 @@ export const SearchResultRow = memo(function SearchResultRow({ movie, onPress }:
       accessibilityLabel={movie.title}
     >
       <View style={styles.thumb}>
-        {uri && <Image source={{ uri }} style={styles.image} resizeMode="cover" />}
+        {uri && (
+          <Image source={{ uri }} style={styles.image} resizeMode="cover" />
+        )}
       </View>
 
       <View style={styles.text}>
-        <AppText variant="strong" numberOfLines={1}>{movie.title}</AppText>
+        <AppText variant="strong" numberOfLines={1}>
+          {movie.title}
+        </AppText>
         {year && (
-          <AppText variant="label" style={styles.year}>{year}</AppText>
+          <AppText variant="label" style={styles.year}>
+            {year}
+          </AppText>
         )}
       </View>
 

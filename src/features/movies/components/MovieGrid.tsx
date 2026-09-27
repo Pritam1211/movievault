@@ -21,7 +21,6 @@ interface Props {
   emptyMessage?: string;
   isRefreshing: boolean;
   onRefresh: () => void;
-
 }
 
 function MovieGrid({
@@ -35,7 +34,6 @@ function MovieGrid({
   isRefreshing,
   onRefresh,
 }: Props) {
-
   const renderItem = useCallback(
     ({ item }: { item: Movie }) => (
       <MovieCard movie={item} onPress={onPressMovie} />
@@ -63,8 +61,6 @@ function MovieGrid({
     );
   }
 
-
-
   return (
     <FlatList
       data={movies}
@@ -88,7 +84,9 @@ function MovieGrid({
           <View style={styles.footer}>
             <ActivityIndicator color={colors.bulb} />
           </View>
-        ) : <></>
+        ) : (
+          <></>
+        )
       }
       refreshControl={
         <RefreshControl

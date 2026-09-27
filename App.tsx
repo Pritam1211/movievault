@@ -23,9 +23,9 @@ export default function App() {
         <SafeAreaProvider>
           <ToastProvider>
             <StatusBar barStyle="light-content" />
-              <NavigationContainer theme={navigationTheme}>
-                <RootNavigator />
-              </NavigationContainer>
+            <NavigationContainer theme={navigationTheme}>
+              <RootNavigator />
+            </NavigationContainer>
           </ToastProvider>
         </SafeAreaProvider>
       </AuthProvider>

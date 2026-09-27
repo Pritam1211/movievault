@@ -24,7 +24,11 @@ export const MovieCard = memo(function MovieCard({ movie, onPress }: Props) {
         <Image source={{ uri }} style={styles.poster} resizeMode="cover" />
       ) : (
         <View style={styles.fallback}>
-          <AppText variant="caption" numberOfLines={5} style={styles.fallbackText}>
+          <AppText
+            variant="caption"
+            numberOfLines={5}
+            style={styles.fallbackText}
+          >
             {movie.title}
           </AppText>
         </View>
@@ -43,6 +47,11 @@ const styles = StyleSheet.create({
   },
   pressed: { opacity: 0.7 },
   poster: { height: '100%', width: '100%' },
-  fallback: { alignItems: 'center', flex: 1, justifyContent: 'center', padding: 8 },
+  fallback: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    padding: 8,
+  },
   fallbackText: { color: colors.dim, textAlign: 'center' },
 });

@@ -5,8 +5,8 @@ import { AuthNavigator } from './AuthNavigator';
 import { colors } from '../theme/colors';
 
 export default function RootNavigator() {
-    const {session,loading} = useAuth();
-    if (loading) {
+  const { session, loading } = useAuth();
+  if (loading) {
     return (
       <View style={styles.splash}>
         <ActivityIndicator color={colors.bulb} />
@@ -14,9 +14,7 @@ export default function RootNavigator() {
     );
   }
 
-  return (
-    session ? <AppNavigator /> : <AuthNavigator />
-  )
+  return session ? <AppNavigator /> : <AuthNavigator />;
 }
 
 const styles = StyleSheet.create({

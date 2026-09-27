@@ -9,9 +9,9 @@ describe('userMessage', () => {
   });
 
   it('maps RLS and JWT failures to a sign-in prompt', () => {
-    expect(userMessage(new Error('new row violates row-level security policy'))).toBe(
-      'You need to be signed in to do that.',
-    );
+    expect(
+      userMessage(new Error('new row violates row-level security policy')),
+    ).toBe('You need to be signed in to do that.');
     expect(userMessage(new Error('JWT expired'))).toBe(
       'You need to be signed in to do that.',
     );
@@ -44,7 +44,9 @@ describe('userMessage', () => {
   });
 
   it('survives non-Error values', () => {
-    expect(userMessage('plain string')).toBe('Something went wrong. Try again.');
+    expect(userMessage('plain string')).toBe(
+      'Something went wrong. Try again.',
+    );
     expect(userMessage(null)).toBe('Something went wrong. Try again.');
     expect(userMessage(undefined)).toBe('Something went wrong. Try again.');
     expect(userMessage({ code: 42 })).toBe('Something went wrong. Try again.');

@@ -59,9 +59,17 @@ export function useToggleWatchlist() {
   const queryKey = ['watchlist', session?.user.id];
 
   return useMutation({
-    mutationFn: async ({ movie, saved }: { movie: SaveInput; saved: boolean }) => {
+    mutationFn: async ({
+      movie,
+      saved,
+    }: {
+      movie: SaveInput;
+      saved: boolean;
+    }) => {
       if (saved) {
-        const { error } = await watchlist().delete().eq('tmdb_id', movie.tmdb_id);
+        const { error } = await watchlist()
+          .delete()
+          .eq('tmdb_id', movie.tmdb_id);
         if (error) throw error;
         return;
       }
@@ -76,7 +84,8 @@ export function useToggleWatchlist() {
       await queryClient.cancelQueries({ queryKey });
 
       // 2. Snapshot, so onError has something to restore.
-      const previous = queryClient.getQueryData<WatchlistEntry[]>(queryKey) ?? [];
+      const previous =
+        queryClient.getQueryData<WatchlistEntry[]>(queryKey) ?? [];
 
       // 3. Write what we expect the result to be.
       const next = saved
@@ -130,10 +139,12 @@ export function useUpdateStatus() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['watchlist', session?.user.id] });
+      queryClient.invalidateQueries({
+        queryKey: ['watchlist', session?.user.id],
+      });
     },
-    onError: (err) => {
+    onError: err => {
       toast.show(userMessage(err));
-    }
+    },
   });
 }
